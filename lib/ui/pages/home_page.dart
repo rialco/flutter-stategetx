@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       children: [
         CustomBanner(200),
-        CircleAvatar(
+        const CircleAvatar(
           backgroundImage:
               NetworkImage("https://randomuser.me/api/portraits/men/75.jpg"),
           radius: 60.0,

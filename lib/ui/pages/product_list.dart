@@ -1,27 +1,14 @@
+import 'package:f_shopping_app/controllers/cart_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../domain/product.dart';
+import '../../domain/models/product.dart';
 import '../Widgets/banner.dart';
 
-class ProductList extends StatefulWidget {
+class ProductList extends StatelessWidget {
   ProductList({Key? key}) : super(key: key);
 
-  @override
-  State<ProductList> createState() => _ProductListState();
-}
-
-class _ProductListState extends State<ProductList> {
-  int counter = 0;
-
-  List<Product> entries = <Product>[];
-
-  @override
-  void initState() {
-    entries.add(Product(0, "Toy car", 10));
-    entries.add(Product(1, "Toy house", 20));
-    super.initState();
-  }
+  final CartController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +20,13 @@ class _ProductListState extends State<ProductList> {
               children: [CustomBanner(50), customAppBar()],
             ),
             Expanded(
-              child: ListView.builder(
+              child:  Obx(() => ListView.builder(
                   padding: const EdgeInsets.all(8),
-                  itemCount: entries.length,
+                  itemCount: controller.products.length,
                   itemBuilder: (context, index) {
-                    return _row(entries[index], index);
-                  }),
+                    return _row(controller.products[index], index);
+                  })
+                  ),
             )
           ],
         ),
@@ -76,14 +64,14 @@ class _ProductListState extends State<ProductList> {
         Text(product.price.toString()),
         Column(
           children: [
-            IconButton(onPressed: null, icon: Icon(Icons.arrow_upward)),
-            IconButton(onPressed: null, icon: Icon(Icons.arrow_downward))
+            IconButton(onPressed: () => controller.updateItem(product.id, QuantityType.positive), icon: const Icon(Icons.arrow_upward)),
+            IconButton(onPressed: () => controller.updateItem(product.id, QuantityType.negative), icon: const Icon(Icons.arrow_downward))
           ],
         ),
         Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Text("Quantity"),
             ),
             Padding(
